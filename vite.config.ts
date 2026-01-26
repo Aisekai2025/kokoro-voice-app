@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/kokoro-voice-app/',  // ★ リポジトリ名に合わせる
+  base: '/kokoro-voice-app/',  // ★ ここが最重要
 })
