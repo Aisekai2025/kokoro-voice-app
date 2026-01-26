@@ -1,5 +1,4 @@
 import "../styles/title.css";
-import React from "react";
 import Logo from "../assets/logo/logo-heartwave.png";
 
 function TitleScreen({ onStart }: { onStart: () => void }) {
