@@ -1,0 +1,114 @@
+.title-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+/* 基本（スマホ基準） */
+.title-logo {
+  width: 140px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* タブレット以上（600px〜） */
+@media (min-width: 600px) {
+  .title-logo {
+    width: 180px;
+  }
+}
+
+/* PC（900px〜） */
+@media (min-width: 900px) {
+  .title-logo {
+    width: 220px;
+  }
+}
+
+/* アプリ名 */
+.title-main {
+  font-size: 36px;
+  margin: 10px 0;
+  color: #333;
+  font-weight: 600;
+}
+
+/* 副題 */
+.title-sub {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* はじめるボタン */
+.start-button {
+  font-size: 20px;
+  padding: 12px 28px;
+  border-radius: 30px;
+  border: none;
+  background: #ffb7c5;
+  color: #333;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.start-button:hover {
+  background: #ff9fb3;
+}
+/* 画面全体のフェードイン */
+@keyframes screenFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.title-screen {
+  animation: screenFadeIn 0.8s ease-out forwards;
+}
+
+/* 共通のフェードイン（下からふわっと） */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ロゴ */
+.title-logo {
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+/* アプリ名 */
+.title-main {
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+/* 副題 */
+.title-sub {
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.45s;
+  opacity: 0;
+}
+
+/* はじめるボタン */
+.start-button {
+  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.6s;
+  opacity: 0;
+}

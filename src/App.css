@@ -1,0 +1,139 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eee;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+/* 押した瞬間にふわっと縮む */
+.back-button:active {
+  transform: scale(0.85);
+  background: #e5e5e5;
+}
+
+.back-button:hover {
+  background: #ddd;
+}
+
+.app-container{
+  position: relative;
+}
+/* 朝：やわらかい光 */
+.app-container.morning {
+  background: #fff7e6;
+}
+
+/* 昼：明るくクリア */
+.app-container.day {
+  background: #ffffff;
+}
+
+/* 夕方：少しオレンジ */
+.app-container.evening {
+  background: #ffe9d6;
+}
+
+/* 夜：静かな青 */
+.app-container.night {
+  background: #e8f0ff;
+}
+.lang-btn {
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.lang-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.lang-btn:active {
+  transform: scale(0.95);
+}
+/* フェードインのアニメーション */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ロゴに適用 */
+.title-logo {
+  animation: fadeIn 1.2s ease-out forwards;
+}
+/* 翻訳画面のフェードイン */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.translation-screen {
+  opacity: 0;
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

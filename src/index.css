@@ -1,0 +1,167 @@
+/* 全体レイアウト */
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Noto Color Emoji",
+    "Hiragino Sans",
+    "Noto Sans JP",
+    sans-serif;
+  background: linear-gradient(180deg, #f0f4ff, #ffffff);
+  color: #333;
+}
+
+.app-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px;
+  text-align: center;
+}
+
+/* タイトル */
+.title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* ★ 言語選択（国旗アイコン） */
+.language-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.lang-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffffcc;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+  font-size: 12px;
+}
+
+.lang-btn .flag {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.lang-btn .code {
+  font-size: 11px;
+  margin-top: 2px;
+  opacity: 0.8;
+}
+
+.lang-btn:hover {
+  transform: scale(1.05);
+}
+
+.lang-btn.active {
+  background: #ffffffee;
+  transform: scale(1.12);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.18);
+}
+
+/* 状態バッジ */
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #e0e0e0;
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* マイクボタン */
+.mic-button {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffffdd;
+  backdrop-filter: blur(6px);
+  font-size: 40px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  margin-bottom: 24px;
+}
+
+.mic-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+}
+
+/* セクション */
+.section {
+  margin-top: 20px;
+  text-align: left;
+  background: #ffffffcc;
+  padding: 16px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.section h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #444;
+}
+
+.section p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ===== 時間帯テーマ ===== */
+
+/* 朝（5:00〜10:59） */
+body.morning {
+  background: linear-gradient(180deg, #fff7d1, #ffeec4);
+}
+
+/* 昼（11:00〜15:59） */
+body.day {
+  background: linear-gradient(180deg, #dff3ff, #ffffff);
+}
+
+/* 夕方（16:00〜18:59） */
+body.evening {
+  background: linear-gradient(180deg, #ffd9b3, #ffbfa0);
+}
+
+/* 夜（19:00〜4:59） */
+body.night {
+  background: linear-gradient(180deg, #1a1a2e, #16213e);
+  color: #eee;
+}
+
+body.night .section {
+  background: #ffffff22;
+  color: #eee;
+}
+
+body.night .title {
+  color: #f0f0f0;
+}
+
+.flag-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+}
