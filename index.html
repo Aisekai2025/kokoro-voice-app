@@ -5,19 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kokoro-voice-app</title>
+  </head>
 
-    <!-- Google tag (gtag.js) -->
+  <body>
+    <div id="root"></div>
+
+    <!-- React / Vite アプリ本体 -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Google tag (gtag.js) — React 初期化後に読み込むのが安全 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-38EKP12GT2"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){ dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', 'G-38EKP12GT2');
     </script>
-
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -14,7 +14,7 @@ import flagVi from "./assets/flags/flag-vi.png";
 import flagEo from "./assets/flags/flag-eo.png"; // エスペラント
 
 function App() {
- // const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+// const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
   // タイトル画面の表示切り替え
   const [showTitle, setShowTitle] = useState(true);
@@ -134,7 +134,7 @@ ${text}
   console.log("PROMPT:", prompt);
 
   try {
-    const res = await fetch("http://localhost:3001/api/gemini", {
+    const res = await fetch("https://kokoro-voice-app.vercel.app/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt }),
