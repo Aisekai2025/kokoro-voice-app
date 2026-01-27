@@ -35,9 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const data = await response.json();
 
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "うまく返答できませんでした。";
+    const reply = data?.reply || "うまく返答できませんでした。";
 
     return res.status(200).json({ reply });
   } catch (err) {
