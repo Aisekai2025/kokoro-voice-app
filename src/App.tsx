@@ -124,30 +124,47 @@ ${text}
   };
 
   // Gemini に問い合わせ
-  const generateResponse = async (text: string, targetLang: string) => {
-    setStatus("処理中…");
+const generateResponse = async (text: string, targetLang: string) => {
+  setStatus("処理中…");
 
-    const prompt = buildTranslationPrompt(text, targetLang);
+  const prompt = buildTranslationPrompt(text, targetLang);
+console.log("PROMPT:", prompt);
 
-    try {
-      const res = await fetch("http://localhost:3001/api/gemini", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
+  try {
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-      const data = await res.json();
-      const reply = data?.reply || "うまく返答できませんでした。";
+const res = await fetch(
+  `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: prompt }],
+        },
+      ],
+    }),
+  }
+);
 
-      setResponseText(reply);
-      setStatus("完了");
-      speakText(reply);
-    } catch (error) {
-      console.error(error);
-      setResponseText("エラーが発生しました。");
-      setStatus("エラー");
-    }
-  };
+    const data = await res.json();
+
+    // ★ ここが重要：Gemini の返答の正しい取り出し方
+    const reply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "うまく返答できませんでした。";
+
+    setResponseText(reply);
+    setStatus("完了");
+    speakText(reply);
+  } catch (error) {
+    console.error(error);
+    setResponseText("エラーが発生しました。");
+    setStatus("エラー");
+  }
+};
 
   // マイク開始
   const startListening = () => {
