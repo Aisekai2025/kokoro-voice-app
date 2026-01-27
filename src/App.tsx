@@ -14,7 +14,7 @@ import flagVi from "./assets/flags/flag-vi.png";
 import flagEo from "./assets/flags/flag-eo.png"; // エスペラント
 
 function App() {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+ // const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
   // タイトル画面の表示切り替え
   const [showTitle, setShowTitle] = useState(true);
