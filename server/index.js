@@ -16,7 +16,7 @@ app.post("/api/gemini", async (req, res) => {
   try {
     const response = await fetch(
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
-    process.env.NODE_GEMINI_API_KEY,
+  process.env.NODE_GEMINI_API_KEY,
   {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -34,8 +34,8 @@ app.post("/api/gemini", async (req, res) => {
     console.log("GEMINI RAW RESPONSE:", JSON.stringify(data, null, 2));
 
     const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "すみません、うまく返答できませんでした。";
+  data?.candidates?.[0]?.content?.parts?.map(p => p.text).join("") ||
+  "すみません、うまく返答できませんでした。";
 
     res.json({ reply: text });
 

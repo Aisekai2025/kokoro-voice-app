@@ -1,3 +1,4 @@
+console.log("ENV TEST:", import.meta.env.VITE_GEMINI_API_KEY);
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
 import TitleScreen from "./components/TitleScreen";
@@ -13,6 +14,8 @@ import flagVi from "./assets/flags/flag-vi.png";
 import flagEo from "./assets/flags/flag-eo.png"; // エスペラント
 
 function App() {
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
   // タイトル画面の表示切り替え
   const [showTitle, setShowTitle] = useState(true);
 
@@ -124,37 +127,22 @@ ${text}
   };
 
   // Gemini に問い合わせ
-const generateResponse = async (text: string, targetLang: string) => {
+  const generateResponse = async (text: string, targetLang: string) => {
   setStatus("処理中…");
 
   const prompt = buildTranslationPrompt(text, targetLang);
-console.log("PROMPT:", prompt);
+  console.log("PROMPT:", prompt);
 
   try {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-const res = await fetch(
-  `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }],
-        },
-      ],
-    }),
-  }
-);
+    const res = await fetch("http://localhost:3001/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
 
     const data = await res.json();
 
-    // ★ ここが重要：Gemini の返答の正しい取り出し方
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "うまく返答できませんでした。";
+    const reply = data?.reply || "うまく返答できませんでした。";
 
     setResponseText(reply);
     setStatus("完了");
@@ -175,30 +163,27 @@ const res = await fetch(
   };
 
   // ★ タイトル画面の表示
- if (showTitle) {
-  return <TitleScreen onStart={() => setShowTitle(false)} />;
-}
+  if (showTitle) {
+    return <TitleScreen onStart={() => setShowTitle(false)} />;
+  }
 
-// ★ 時間帯テーマの判定（ここに入れる）
-const hour = new Date().getHours();
-let theme = "day";
+  // ★ 時間帯テーマの判定
+  const hour = new Date().getHours();
+  let theme = "day";
 
-if (hour < 5) theme = "night";
-else if (hour < 11) theme = "morning";
-else if (hour < 17) theme = "day";
-else theme = "evening";
+  if (hour < 5) theme = "night";
+  else if (hour < 11) theme = "morning";
+  else if (hour < 17) theme = "day";
+  else theme = "evening";
 
-// ★ 翻訳画面
-return (
-  <div className={`app-container ${theme} translation-screen`}>
+  // ★ 翻訳画面
+  return (
+    <div className={`app-container ${theme} translation-screen`}>
+      <button className="back-button" onClick={() => setShowTitle(true)}>
+        ↩︎
+      </button>
 
-    {/* タイトルに戻るボタン */}
-    <button className="back-button" onClick={() => setShowTitle(true)}>
-      ↩︎
-    </button>
-
-    {/* 翻訳画面のタイトル */}
-    <h1 className="title">ココロノキモチ</h1>
+      <h1 className="title">ココロノキモチ</h1>
 
       <h2>あなたが話す言語</h2>
       <div className="language-selector">
