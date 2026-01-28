@@ -16,7 +16,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,7 +30,15 @@ export default async function handler(req: any, res: any) {
       }
     );
 
-    const data = await response.json();
+    const text = await response.text(); // ← JSON じゃない可能性があるのでまず text で読む
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      console.error("RAW RESPONSE:", text);
+      return res.status(500).json({ error: "Invalid JSON from Gemini API" });
+    }
 
     const reply =
       data?.candidates?.[0]?.content?.parts?.[0]?.text ||
