@@ -130,11 +130,11 @@ ${text}
     const prompt = buildTranslationPrompt(text, targetLang);
 
     try {
-      const res = await fetch("https://kokoro-voice-app.vercel.app/api/gemini", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
+      const res = await fetch("/api/gemini", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ prompt }),
+});
 
       const data = await res.json();
 
