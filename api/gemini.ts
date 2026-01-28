@@ -1,4 +1,6 @@
-export default async function handler(req: any, res: any) {
+import type { NextApiRequest, NextApiResponse } from "next";
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -15,22 +17,23 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: "API key missing" });
     }
 
+    // ★ v1 の正式エンドポイント
     const response = await fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          parts: [{ text: prompt }],
-        },
-      ],
-    }),
-  }
-);
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }],
+            },
+          ],
+        }),
+      }
+    );
 
-    const text = await response.text(); // ← JSON じゃない可能性があるのでまず text で読む
+    const text = await response.text();
 
     let data;
     try {
