@@ -1,4 +1,3 @@
-console.log("ENV TEST:", import.meta.env.VITE_GEMINI_API_KEY);
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
 import TitleScreen from "./components/TitleScreen";
@@ -14,8 +13,6 @@ import flagVi from "./assets/flags/flag-vi.png";
 import flagEo from "./assets/flags/flag-eo.png"; // エスペラント
 
 function App() {
-// const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
   // タイトル画面の表示切り替え
   const [showTitle, setShowTitle] = useState(true);
 
@@ -128,31 +125,31 @@ ${text}
 
   // Gemini に問い合わせ
   const generateResponse = async (text: string, targetLang: string) => {
-  setStatus("処理中…");
+    setStatus("処理中…");
 
-  const prompt = buildTranslationPrompt(text, targetLang);
-  console.log("PROMPT:", prompt);
+    const prompt = buildTranslationPrompt(text, targetLang);
 
-  try {
-    const res = await fetch("https://kokoro-voice-app.vercel.app/api/gemini", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
+    try {
+      const res = await fetch("https://kokoro-voice-app.vercel.app/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    const reply = data?.reply || "うまく返答できませんでした。";
+      // ★ Vercel API の返し方に合わせる
+      const reply = data?.reply || "うまく返答できませんでした。";
 
-    setResponseText(reply);
-    setStatus("完了");
-    speakText(reply);
-  } catch (error) {
-    console.error(error);
-    setResponseText("エラーが発生しました。");
-    setStatus("エラー");
-  }
-};
+      setResponseText(reply);
+      setStatus("完了");
+      speakText(reply);
+    } catch (error) {
+      console.error(error);
+      setResponseText("エラーが発生しました。");
+      setStatus("エラー");
+    }
+  };
 
   // マイク開始
   const startListening = () => {
