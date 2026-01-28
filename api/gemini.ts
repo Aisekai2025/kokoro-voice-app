@@ -16,14 +16,16 @@ export default async function handler(req: any, res: any) {
     }
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateText?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          prompt: {
-            text: prompt,
-          },
+          contents: [
+            {
+              parts: [{ text: prompt }],
+            },
+          ],
         }),
       }
     );
@@ -31,7 +33,7 @@ export default async function handler(req: any, res: any) {
     const data = await response.json();
 
     const reply =
-      data?.candidates?.[0]?.output ||
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       data?.error?.message ||
       "うまく返答できませんでした。";
 
