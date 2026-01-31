@@ -1,56 +1,58 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+console.log("ENV KEY:", process.env.GEMINI_API_KEY);
+export const config = {
+  runtime: "edge",
+};
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
+export default async function handler(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    return new Response(null, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
   }
 
+  const { prompt } = await req.json();
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return Response.json({ error: "API key missing" }, { status: 500 });
+  }
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
+        ],
+      }),
+    }
+  );
+
+  const text = await response.text();
+
+  let data;
   try {
-    const { prompt } = req.body;
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      return res.status(500).json({ error: "API key missing" });
-    }
-
-    // ★ v1 の正式モデル名（generateContent 対応）
-    const response = await fetch(
-  `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          parts: [{ text: prompt }],
-        },
-      ],
-    }),
+    data = JSON.parse(text);
+  } catch {
+    return Response.json(
+      { error: "Invalid JSON from Gemini API", raw: text },
+      { status: 500 }
+    );
   }
-);
 
-    const text = await response.text();
+  const reply =
+    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+    data?.error?.message ||
+    "うまく返答できませんでした。";
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      console.error("RAW RESPONSE:", text);
-      return res.status(500).json({ error: "Invalid JSON from Gemini API" });
-    }
-
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      data?.error?.message ||
-      "うまく返答できませんでした。";
-
-    return res.status(200).json({ reply });
-  } catch (err) {
-    console.error("SERVER ERROR:", err);
-    return res.status(500).json({ error: "Server error" });
-  }
+  return Response.json({ reply });
 }

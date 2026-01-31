@@ -10,47 +10,63 @@ import flagKo from "./assets/flags/flag-ko.png";
 import flagEs from "./assets/flags/flag-es.png";
 import flagFr from "./assets/flags/flag-fr.png";
 import flagVi from "./assets/flags/flag-vi.png";
-import flagEo from "./assets/flags/flag-eo.png"; // エスペラント
+import flagEo from "./assets/flags/flag-eo.png";
+
+// ★ ここが唯一の languages（旗あり＋追加言語アイコン）
+const languages = [
+  { code: "ja", label: "日本語", img: flagJa, tts: "ja-JP" },
+  { code: "en", label: "English", img: flagEn, tts: "en-US" },
+  { code: "zh", label: "中文", img: flagZh, tts: "zh-CN" },
+  { code: "ko", label: "한국어", img: flagKo, tts: "ko-KR" },
+  { code: "es", label: "Español", img: flagEs, tts: "es-ES" },
+  { code: "fr", label: "Français", img: flagFr, tts: "fr-FR" },
+  { code: "vi", label: "Tiếng Việt", img: flagVi, tts: "vi-VN" },
+  { code: "eo", label: "Esperanto", img: flagEo, tts: "eo" },
+
+  // 追加言語（旗なし → アイコン）
+  { code: "grc", label: "Ἑλληνική", icon: "🏛️", tts: "en-US" },
+  { code: "lat", label: "Latina", icon: "📜", tts: "en-US" },
+  { code: "ain", label: "アイヌ イタㇰ", icon: "🌿", tts: "ja-JP" },
+  { code: "eu", label: "Euskara", icon: "🌀", tts: "en-US" },
+  { code: "sa", label: "संस्कृतम्", icon: "🔱", tts: "en-US" },
+  { code: "haw", label: "ʻŌlelo Hawaiʻi", icon: "🌺", tts: "en-US" },
+  { code: "mi", label: "Te Reo Māori", icon: "🌀", tts: "en-US" },
+  { code: "zu", label: "isiZulu", icon: "🐘", tts: "en-US" },
+  { code: "nv", label: "Diné Bizaad", icon: "🏜️", tts: "en-US" },
+];
+
+// Gemini 用の言語名
+const languageNames: any = {
+  ja: "Japanese",
+  en: "English",
+  zh: "Chinese",
+  ko: "Korean",
+  es: "Spanish",
+  fr: "French",
+  vi: "Vietnamese",
+  eo: "Esperanto",
+
+  grc: "Ancient Greek",
+  lat: "Latin",
+  ain: "Ainu",
+  eu: "Basque",
+  sa: "Sanskrit",
+  haw: "Hawaiian",
+  mi: "Maori",
+  zu: "Zulu",
+  nv: "Navajo",
+};
 
 function App() {
-  // タイトル画面の表示切り替え
   const [showTitle, setShowTitle] = useState(true);
 
-  // 翻訳画面の状態
   const [isListening, setIsListening] = useState(false);
   const [status, setStatus] = useState("待機中");
   const [userText, setUserText] = useState("");
   const [responseText, setResponseText] = useState("");
   const recognitionRef = useRef<any>(null);
 
-  // 言語リスト
-  const languages = [
-    { code: "ja", label: "JA", img: flagJa, tts: "ja-JP" },
-    { code: "en", label: "EN", img: flagEn, tts: "en-US" },
-    { code: "zh", label: "ZH", img: flagZh, tts: "zh-CN" },
-    { code: "ko", label: "KO", img: flagKo, tts: "ko-KR" },
-    { code: "es", label: "ES", img: flagEs, tts: "es-ES" },
-    { code: "fr", label: "FR", img: flagFr, tts: "fr-FR" },
-    { code: "vi", label: "VI", img: flagVi, tts: "vi-VN" },
-    { code: "eo", label: "EO", img: flagEo, tts: "eo" },
-  ];
-
-  // Gemini 用の言語名
-  const languageNames: any = {
-    ja: "Japanese",
-    en: "English",
-    zh: "Chinese",
-    ko: "Korean",
-    es: "Spanish",
-    fr: "French",
-    vi: "Vietnamese",
-    eo: "Esperanto",
-  };
-
-  // 入力言語（音声認識）
   const [inputLanguage, setInputLanguage] = useState("ja");
-
-  // 翻訳先言語（Gemini + TTS）
   const [targetLanguage, setTargetLanguage] = useState("en");
 
   // 時間帯テーマ
@@ -123,7 +139,7 @@ ${text}
 `;
   };
 
-  // Gemini に問い合わせ
+  // Gemini API
   const generateResponse = async (text: string, targetLang: string) => {
     setStatus("処理中…");
 
@@ -131,14 +147,12 @@ ${text}
 
     try {
       const res = await fetch("/api/gemini", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ prompt }),
-});
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
 
       const data = await res.json();
-
-      // ★ Vercel API の返し方に合わせる
       const reply = data?.reply || "うまく返答できませんでした。";
 
       setResponseText(reply);
@@ -159,12 +173,12 @@ ${text}
     }
   };
 
-  // ★ タイトル画面の表示
+  // タイトル画面
   if (showTitle) {
     return <TitleScreen onStart={() => setShowTitle(false)} />;
   }
 
-  // ★ 時間帯テーマの判定
+  // 時間帯テーマ
   const hour = new Date().getHours();
   let theme = "day";
 
@@ -173,7 +187,7 @@ ${text}
   else if (hour < 17) theme = "day";
   else theme = "evening";
 
-  // ★ 翻訳画面
+  // 翻訳画面
   return (
     <div className={`app-container ${theme} translation-screen`}>
       <button className="back-button" onClick={() => setShowTitle(true)}>
@@ -182,29 +196,47 @@ ${text}
 
       <h1 className="title">ココロノキモチ</h1>
 
+      {/* あなたが話す言語 */}
       <h2>あなたが話す言語</h2>
       <div className="language-selector">
         {languages.map((lang) => (
           <button
             key={lang.code}
-            className={`lang-btn ${inputLanguage === lang.code ? "active" : ""}`}
+            className={
+              lang.img
+                ? `lang-btn ${inputLanguage === lang.code ? "active" : ""}`
+                : `lang-btn lang-square ${inputLanguage === lang.code ? "active" : ""}`
+            }
             onClick={() => setInputLanguage(lang.code)}
           >
-            <img src={lang.img} alt={lang.label} className="flag-img" />
+            {lang.img ? (
+              <img src={lang.img} alt={lang.label} className="flag-img" />
+            ) : (
+              <span className="icon">{lang.icon}</span>
+            )}
             <span className="code">{lang.label}</span>
           </button>
         ))}
       </div>
 
+      {/* 翻訳する言語 */}
       <h2>翻訳する言語</h2>
       <div className="language-selector">
         {languages.map((lang) => (
           <button
             key={lang.code}
-            className={`lang-btn ${targetLanguage === lang.code ? "active" : ""}`}
+            className={
+              lang.img
+                ? `lang-btn ${targetLanguage === lang.code ? "active" : ""}`
+                : `lang-btn lang-square ${targetLanguage === lang.code ? "active" : ""}`
+            }
             onClick={() => setTargetLanguage(lang.code)}
           >
-            <img src={lang.img} alt={lang.label} className="flag-img" />
+            {lang.img ? (
+              <img src={lang.img} alt={lang.label} className="flag-img" />
+            ) : (
+              <span className="icon">{lang.icon}</span>
+            )}
             <span className="code">{lang.label}</span>
           </button>
         ))}

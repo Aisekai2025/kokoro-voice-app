@@ -137,3 +137,38 @@
   opacity: 0;
   animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.lang-square {
+  background-color: #faf7f3;
+  color: #333;
+  padding: 6px 10px;      /* ← 10px 16px → 6px 10px に縮小 */
+  border-radius: 14px;
+  border: 1px solid #e8e3dd;
+  font-size: 14px;        /* ← 15px → 14px に調整 */
+  cursor: pointer;
+  margin: 4px;            /* ← 6px → 4px に縮小 */
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;               /* ← アイコンとの距離も少し縮める */
+  min-width: 110px;       /* ← 140px → 110px に縮小 */
+  justify-content: center;
+}
+
+.lang-square:hover {
+  background-color: #f3eee9;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+}
+
+.lang-square.active {
+  background-color: #efe9e3;
+  border-color: #d8d2cc;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.lang-square .icon {
+  font-size: 16px;   /* ← 18px → 14px に縮小 */
+  line-height: 1;
+  opacity: 0.85;      /* 少しだけ柔らかく */
+}
